@@ -45,7 +45,7 @@ class Pacientes{
             }
           });
         });
-      }
+    }
     
     getById(id) {
         return new Promise((accept, reject) => {
@@ -61,7 +61,7 @@ class Pacientes{
             }
           });
         });
-      }
+    }
 
     updateOne (id, nombres, apellidos, identidad, telefono,correo){
         return new Promise(
@@ -83,9 +83,9 @@ class Pacientes{
 
           }
         );
-      }
+    }
 
-      deleteOne (id){
+    deleteOne (id){
         return new Promise(
           (accept,reject)=>{
             const sqlDelete = 'DELETE FROM pacientes where id =?;';
@@ -105,7 +105,7 @@ class Pacientes{
 
           }
         );
-      }
+    }
 }
 
 module.exports = Pacientes;
