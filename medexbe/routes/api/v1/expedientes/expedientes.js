@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   res.status(200).json(
     {
       endpoint: 'Expedientes',
-      updates: new Date(2022,0,19,18,41,00)
+      updates: new Date(2022,0,19,18,41,0)
     }
   );
 }); //GET /
