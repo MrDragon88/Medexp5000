@@ -1,4 +1,7 @@
+//const { ObjectId } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 const getDB = require('../mongodb');
+
 let db = null;
 class Pacientes{
     collection = null;
@@ -7,7 +10,7 @@ class Pacientes{
         getDB()
         .then((database)=>{
             db = database;
-            collection = db.collection('Pacientes');
+            this.collection = db.collection('Pacientes');
 
             if(process.env.MIGRATE ==='true'){
                 //Por si se ocupa algo
@@ -31,15 +34,34 @@ class Pacientes{
     }
 
     async getAll () {
-        
+        const cursor = this.collection.find({});
+        const documents = await cursor.toArray();
+        return documents;
     }
     
     async getById(id) {
+        const _id = new ObjectId(id);
+        const filter = {_id};
+        const myDocument = await this.collection.findOne(filter);
+        return myDocument;
         
     }
 
     async updateOne (id, nombres, apellidos, identidad, telefono,correo){
         
+        const filter = {_id: new ObjectId(id)};
+        const updateCmd ={
+            '$set':{
+                nombres, 
+                apellidos, 
+                identidad, 
+                telefono,
+                correo
+            }
+        };
+        
+        const rslt = await this.collection.updateOne(filter,updateCmd);
+        return rslt;
     }
 
     async deleteOne (id){
