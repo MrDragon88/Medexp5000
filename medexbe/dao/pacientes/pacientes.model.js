@@ -38,7 +38,22 @@ class Pacientes{
         const documents = await cursor.toArray();
         return documents;
     }
-    
+
+    async getFaceted(page,items,filter={}){
+        const cursor = this.collection.find(filter);
+        const totalItems = await cursor.count();
+        cursor.skip((page -1)* items);
+        cursor.limit(items);
+
+        const resultados = await cursor.toArray();
+        return {
+            totalItems,
+            page,
+            items, 
+            totalpages:(Math.ceil(totalItems/items)),
+            resultados};
+    }
+
     async getById(id) {
         const _id = new ObjectId(id);
         const filter = {_id};
@@ -62,6 +77,48 @@ class Pacientes{
         
         const rslt = await this.collection.updateOne(filter,updateCmd);
         return rslt;
+    }
+
+    async updateAddTag(id, tagEntry){
+        const updateCmd ={
+            "$push":{
+                tags: tagEntry
+            }
+        }
+
+        const filter = {_id: new ObjectId(id)};
+        return await this.collection.updateOne(filter, updateCmd);
+    }
+
+    async updateAddTagSet(id, tagEntry){
+        const updateCmd ={
+            "$addToSet":{
+                tags: tagEntry
+            }
+        }
+
+        const filter = {_id: new ObjectId(id)};
+        return await this.collection.updateOne(filter, updateCmd);
+    }
+
+    //removeonetag
+    /*
+        The $pop operator removes the first or last element of an array. 
+        Pass $pop a value of -1 to remove the first element of an array 
+        and 1 to remove the last element in an array.
+
+    */
+    async updateRemoveTagSet(id, tagEntry){
+        const nameEntry = tagEntry;
+        const updateCmd ={
+            "$pop":{
+                //nameEntry: -1
+                tags:-1
+            }
+        }
+
+        const filter = {_id: new ObjectId(id)};
+        return await this.collection.updateOne(filter, updateCmd);
     }
 
     async deleteOne (id){
