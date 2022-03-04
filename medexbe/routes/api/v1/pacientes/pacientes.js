@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
       updates: new Date(2022,0,19,18,41,0)
     }
   );
-}); //GET /
+}); //GET //
 
 router.get('/all', async (req, res) => {
   try {
