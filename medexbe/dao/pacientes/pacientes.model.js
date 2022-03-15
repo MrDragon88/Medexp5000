@@ -122,7 +122,11 @@ class Pacientes{
     }
 
     async deleteOne (id){
+        const filter = {_id: new ObjectId(id)};
         
+        
+        const rslt = await this.collection.deleteOne(filter);
+        return rslt;
     }
 }
 
